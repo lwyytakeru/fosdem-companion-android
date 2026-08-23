@@ -16,7 +16,7 @@ import java.time.ZoneId
 @Inject
 @SingleIn(AppScope::class)
 class EventMetadataProvider(
-    private val deviceZoneIdFlow: @JvmSuppressWildcards Flow<ZoneId>,
+    private val deviceZoneIdFlow: Flow<ZoneId>,
     userSettingsProvider: UserSettingsProvider,
     private val api: FosdemApi,
 ) {
