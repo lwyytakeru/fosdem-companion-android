@@ -11,6 +11,7 @@ import be.digitalia.fosdem.model.Event
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,7 +66,7 @@ class BookmarkStatusViewModel(
 
     private fun removeBookmark(event: Event) {
         val eventIds = longArrayOf(event.id)
-        viewModelScope.launch {
+        viewModelScope.launch(start = CoroutineStart.ATOMIC) {
             withContext(NonCancellable) {
                 if (bookmarksDao.removeBookmarks(eventIds) > 0) {
                     alarmManager.onBookmarksRemoved(eventIds)
@@ -75,7 +76,7 @@ class BookmarkStatusViewModel(
     }
 
     private fun addBookmark(event: Event) {
-        viewModelScope.launch {
+        viewModelScope.launch(start = CoroutineStart.ATOMIC) {
             withContext(NonCancellable) {
                 bookmarksDao.addBookmark(event)?.let { alarmInfo ->
                     alarmManager.onBookmarksAdded(listOf(alarmInfo))

@@ -20,6 +20,7 @@ import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
 import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -40,7 +41,7 @@ class ExternalBookmarksViewModel(
         }.flow.cachedIn(viewModelScope)
 
     fun addAll() {
-        viewModelScope.launch {
+        viewModelScope.launch(start = CoroutineStart.ATOMIC) {
             withContext(NonCancellable) {
                 bookmarksDao.addBookmarks(bookmarkIds).let { alarmInfos ->
                     alarmManager.onBookmarksAdded(alarmInfos)
